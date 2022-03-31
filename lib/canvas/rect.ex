@@ -22,15 +22,20 @@ defmodule Canvas.Rect do
   end
 
   @spec draw(Area.t(), t(), integer(), integer) :: Area.t()
-  def draw(area, %Canvas.Rect{outline: nil} = rect, x, y) do
+  def draw(area, %__MODULE__{height: h, width: w}, x, y)
+    when area.height < y + h or area.width < x + w
+  do
+    raise ArgumentError, "Rect does not fit"
+  end
+  def draw(area, %__MODULE__{outline: nil} = rect, x, y) do
     draw_fill(area, x, y, rect.height, rect.width, rect.fill)
   end
 
-  def draw(area, %Canvas.Rect{fill: nil} = rect, x, y) do
+  def draw(area, %__MODULE__{fill: nil} = rect, x, y) do
     draw_outline(area, x, y, rect.height, rect.width, rect.outline)
   end
 
-  def draw(area, %Canvas.Rect{fill: fill, outline: outline} = rect, x, y)
+  def draw(area, %__MODULE__{fill: fill, outline: outline} = rect, x, y)
       when fill != nil and outline != nil do
     area
     |> draw_outline(x, y, rect.height, rect.width, outline)

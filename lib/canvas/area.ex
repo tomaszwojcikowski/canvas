@@ -10,7 +10,10 @@ defmodule Canvas.Area do
   @type pos() :: non_neg_integer()
 
   @spec new(pos_integer(), pos_integer()) :: Canvas.Area.t()
-  def new(height, width) when height > 0 and width > 0 do
+  def new(height, width) when height <=0 or width <=0 do
+    raise ArgumentError, "height and width must be > 0"
+  end
+  def new(height, width) do
     %__MODULE__{
       height: height,
       width: width,
@@ -25,18 +28,21 @@ defmodule Canvas.Area do
     |> Enum.into(Arrays.new())
   end
 
-  @spec draw(any, Canvas.Rect.t(), pos(), pos()) :: t()
+  @spec draw(t(), Canvas.Rect.t(), pos(), pos()) :: t()
+  def draw(_area, _rect, x, y) when x < 0 or y < 0 do
+    raise ArgumentError, "x and y cannot be negative"
+  end
   def draw(area, rect, x, y) do
     Canvas.Rect.draw(area, rect, x, y)
   end
 
 
   @spec draw_horizontal(t(), integer, integer, integer, char()) :: t()
-  def draw_horizontal(canvas, x, y, width, fill) do
+  def draw_horizontal(area, x, y, width, fill) do
     x..(x + width - 1)
-    |> Enum.reduce(canvas, fn i, canv ->
-      new_x_array = canv.content[y] |> Arrays.replace(i, fill)
-      %{canv | content: canv.content |> Arrays.replace(y, new_x_array)}
+    |> Enum.reduce(area, fn i, ar ->
+      new_x_array = ar.content[y] |> Arrays.replace(i, fill)
+      %{ar | content: ar.content |> Arrays.replace(y, new_x_array)}
     end)
   end
 
@@ -47,11 +53,22 @@ defmodule Canvas.Area do
     end)
   end
 
-
-
   def to_list(area) do
     area.content
     |> Enum.to_list()
     |> Enum.map(&Enum.to_list(&1))
+  end
+
+  def to_ascii(area) do
+    area
+    |> to_list()
+    |> Stream.map(fn l ->
+      Enum.map(l, fn
+        nil -> " "
+        a -> a
+        end)
+    end)
+    |> Stream.map(&List.to_string/1)
+    |> Enum.join("\n")
   end
 end

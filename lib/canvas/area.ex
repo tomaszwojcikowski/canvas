@@ -69,6 +69,7 @@ defmodule Canvas.Area do
         end)
     end)
     |> Stream.map(&List.to_string/1)
+    |> Stream.map(&String.trim_trailing/1)
     |> Enum.join("\n")
   end
 end

@@ -1,18 +1,17 @@
 defmodule Canvas.Rect do
-
   alias Canvas.Area
 
   defstruct [:height, :width, :outline, :fill]
 
   @type t() :: %__MODULE__{
-    height: pos_integer(),
-    width: pos_integer(),
-    outline: char() | nil,
-    fill: char() | nil
-  }
+          height: pos_integer(),
+          width: pos_integer(),
+          outline: char() | nil,
+          fill: char() | nil
+        }
 
-
-  def new(height, width, outline, fill) when (outline != nil) or (fill != nil) do
+  def new(height, width, outline, fill)
+      when (outline != nil or fill != nil) and height > 0 and width > 0 do
     %__MODULE__{
       height: height,
       width: width,
@@ -21,12 +20,16 @@ defmodule Canvas.Rect do
     }
   end
 
+  def new(_, _, _, _) do
+    raise ArgumentError
+  end
+
   @spec draw(Area.t(), t(), integer(), integer) :: Area.t()
   def draw(area, %__MODULE__{height: h, width: w}, x, y)
-    when area.height < y + h or area.width < x + w
-  do
+      when area.height < y + h or area.width < x + w do
     raise ArgumentError, "Rect does not fit"
   end
+
   def draw(area, %__MODULE__{outline: nil} = rect, x, y) do
     draw_fill(area, x, y, rect.height, rect.width, rect.fill)
   end
@@ -56,5 +59,4 @@ defmodule Canvas.Rect do
     |> Area.draw_vertical(x, y + 1, height - 2, outline)
     |> Area.draw_vertical(x + width - 1, y + 1, height - 2, outline)
   end
-
 end

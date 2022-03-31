@@ -10,9 +10,10 @@ defmodule Canvas.Area do
   @type pos() :: non_neg_integer()
 
   @spec new(pos_integer(), pos_integer()) :: Canvas.Area.t()
-  def new(height, width) when height <=0 or width <=0 do
+  def new(height, width) when height <= 0 or width <= 0 do
     raise ArgumentError, "height and width must be > 0"
   end
+
   def new(height, width) do
     %__MODULE__{
       height: height,
@@ -32,10 +33,10 @@ defmodule Canvas.Area do
   def draw(_area, _rect, x, y) when x < 0 or y < 0 do
     raise ArgumentError, "x and y cannot be negative"
   end
+
   def draw(area, rect, x, y) do
     Canvas.Rect.draw(area, rect, x, y)
   end
-
 
   @spec draw_horizontal(t(), integer, integer, integer, char()) :: t()
   def draw_horizontal(area, x, y, width, fill) do
@@ -66,7 +67,7 @@ defmodule Canvas.Area do
       Enum.map(l, fn
         nil -> " "
         a -> a
-        end)
+      end)
     end)
     |> Stream.map(&List.to_string/1)
     |> Stream.map(&String.trim_trailing/1)

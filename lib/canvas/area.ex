@@ -7,6 +7,8 @@ defmodule Canvas.Area do
           content: Arrays.array()
         }
 
+  @type pos() :: non_neg_integer()
+
   @spec new(pos_integer(), pos_integer()) :: Canvas.Area.t()
   def new(height, width) when height > 0 and width > 0 do
     %__MODULE__{
@@ -23,21 +25,11 @@ defmodule Canvas.Area do
     |> Enum.into(Arrays.new())
   end
 
-  @spec draw(t(), pos_integer(), pos_integer(), Canvas.Rect.t()) :: t()
-  def draw(area, x, y, %Canvas.Rect{outline: nil} = rect) do
-    draw_fill(area, x, y, rect.height, rect.width, rect.fill)
+  @spec draw(any, Canvas.Rect.t(), pos(), pos()) :: t()
+  def draw(area, rect, x, y) do
+    Canvas.Rect.draw(area, rect, x, y)
   end
 
-  def draw(area, x, y, %Canvas.Rect{fill: nil} = rect) do
-    draw_outline(area, x, y, rect.height, rect.width, rect.outline)
-  end
-
-  def draw(area, x, y, %Canvas.Rect{fill: fill, outline: outline} = rect)
-      when fill != nil and outline != nil do
-    area
-    |> draw_outline(x, y, rect.height, rect.width, outline)
-    |> draw_fill(x + 1, y + 1, rect.height - 2, rect.width - 2, fill)
-  end
 
   @spec draw_horizontal(t(), integer, integer, integer, char()) :: t()
   def draw_horizontal(canvas, x, y, width, fill) do
@@ -55,21 +47,7 @@ defmodule Canvas.Area do
     end)
   end
 
-  def draw_fill(area, x, y, height, width, fill) do
-    y..(y + height - 1)
-    |> Enum.reduce(area, fn j, ar ->
-      ar |> draw_horizontal(x, j, width, fill)
-    end)
-  end
 
-  @spec draw_outline(t(), integer(), integer(), pos_integer(), pos_integer(), char()) :: t()
-  def draw_outline(area, x, y, height, width, outline) do
-    area
-    |> draw_horizontal(x, y, width, outline)
-    |> draw_horizontal(x, y + height - 1, width, outline)
-    |> draw_vertical(x, y + 1, height - 2, outline)
-    |> draw_vertical(x + width - 1, y + 1, height - 2, outline)
-  end
 
   def to_list(area) do
     area.content

@@ -22,6 +22,9 @@ defmodule CanvasWeb.CanvasControllerTest do
     }
 
     conn = post(conn, Routes.canvas_path(conn, :create), %{"rects" => [rect]})
-    assert "\n\n %%%%%%\n %&&&&%\n %&&&&%\n %&&&&%\n %%%%%%" = conn.resp_body
+    id = conn.resp_body
+
+    conn = get(conn, Routes.canvas_path(conn, :show, id))
+    assert "\n\n %%%%%%\n %&&&&%\n %&&&&%\n %&&&&%\n %%%%%%" == conn.resp_body
   end
 end

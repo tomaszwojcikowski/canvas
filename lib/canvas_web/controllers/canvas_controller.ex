@@ -22,7 +22,9 @@ defmodule CanvasWeb.CanvasController do
         Canvas.Area.draw(ar, rect, r[:x], r[:y])
       end)
 
-    text(conn, Canvas.Area.to_ascii(area2))
+    m_area = Canvas.Areas.create(area2)
+
+    text(conn, m_area.uuid)
   end
 
   defp parse_rect(r) do
@@ -36,7 +38,13 @@ defmodule CanvasWeb.CanvasController do
     ]
   end
 
+  @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
-    json(conn, %{id: id})
+    case Canvas.Areas.get_by_uuid(id) do
+      {:ok, area} ->
+        text(conn, Canvas.Area.to_ascii(area))
+      _ ->
+        render(conn, :"404")
+    end
   end
 end

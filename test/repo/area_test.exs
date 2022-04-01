@@ -1,5 +1,5 @@
 defmodule Canvas.AreaRepoTest do
-  use Canvas.DataCase
+  use Canvas.DataCase, async: true
 
   test "create empty" do
     model =
@@ -8,6 +8,10 @@ defmodule Canvas.AreaRepoTest do
 
     assert "[[null]]" == model.content
     assert is_binary(model.uuid)
+  end
+
+  test "load not_found" do
+    assert {:error, :not_found} == Canvas.Areas.get_by_uuid("ada8d3a3-144c-4338-a3c5-651460789fe6")
   end
 
   test "draw and create" do

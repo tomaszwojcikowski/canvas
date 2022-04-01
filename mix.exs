@@ -5,7 +5,7 @@ defmodule Canvas.MixProject do
     [
       app: :canvas,
       version: "0.1.0",
-      elixir: "~> 1.12",
+      elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -34,6 +34,7 @@ defmodule Canvas.MixProject do
   defp deps do
     [
       {:arrays, "~> 2.0"},
+      {:dialyzex, "~> 1.3.0", only: [:test, :dev]},
       {:ecto_sql, "~> 3.6"},
       {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
       {:floki, ">= 0.30.0", only: :test},

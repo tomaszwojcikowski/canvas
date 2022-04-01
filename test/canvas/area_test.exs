@@ -13,42 +13,42 @@ defmodule AreaTest do
 
     test "draw 1x1" do
       area = Area.new(5, 5)
-      rect = Rect.new(1, 1, nil, 'c')
-      assert "\n\n  c\n\n" == Area.draw(area, rect, 2, 2) |> Area.to_ascii()
+      rect = Rect.new(1, 1, nil, ?c)
+      assert "\n\n  c" == Area.draw(area, rect, 2, 2) |> Area.to_ascii()
     end
 
     test "draw simple" do
-      rect = Rect.new(2, 2, nil, 'a')
+      rect = Rect.new(2, 2, nil, ?a)
       area = Area.new(3, 3)
 
-      [['a', 'a', nil], ['a', 'a', nil], [nil, nil, nil]] =
+      [[?a, ?a, nil], [?a, ?a, nil], [nil, nil, nil]] =
         Area.draw(area, rect, 0, 0) |> Area.to_list()
     end
 
     test "draw outline" do
-      rect = Rect.new(3, 3, 'b', nil)
+      rect = Rect.new(3, 3, ?b, nil)
       area = Area.new(4, 4)
       area2 = Area.draw(area, rect, 0, 0)
 
-      [['b', 'b', 'b', nil], ['b', nil, 'b', nil], ['b', 'b', 'b', nil], [nil, nil, nil, nil]] =
+      [[?b, ?b, ?b, nil], [?b, nil, ?b, nil], [?b, ?b, ?b, nil], [nil, nil, nil, nil]] =
         area2 |> Area.to_list()
     end
 
     test "draw outline and fill" do
-      rect = Rect.new(3, 3, 'a', 'b')
+      rect = Rect.new(3, 3, ?a, ?b)
       area = Area.new(4, 4)
       area2 = Area.draw(area, rect, 0, 0)
 
       ascii = area2 |> Area.to_ascii()
 
-      assert "aaa\naba\naaa\n" == ascii
+      assert "aaa\naba\naaa" == ascii
     end
   end
 
   describe "draw multiple" do
     test "draw two small" do
-      rect = Rect.new(3, 3, 'a', 'b')
-      rect2 = Rect.new(2, 2, 'c', 'd')
+      rect = Rect.new(3, 3, ?a, ?b)
+      rect2 = Rect.new(2, 2, ?c, ?d)
 
       ascii =
         Area.new(10, 10)
@@ -56,7 +56,7 @@ defmodule AreaTest do
         |> Area.draw(rect2, 5, 5)
         |> Area.to_ascii()
 
-      assert "aaa\naba\naaa\n\n\n     dd\n     dd\n\n\n" ==
+      assert "aaa\naba\naaa\n\n\n     dd\n     dd" ==
                ascii
     end
 

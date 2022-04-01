@@ -9,6 +9,10 @@ defmodule Canvas.Area do
 
   @type pos() :: non_neg_integer()
 
+  def new() do
+    new(100, 100)
+  end
+
   @spec new(pos_integer(), pos_integer()) :: Canvas.Area.t()
   def new(height, width) when height <= 0 or width <= 0 do
     raise ArgumentError, "height and width must be > 0"
@@ -71,6 +75,10 @@ defmodule Canvas.Area do
     end)
     |> Stream.map(&List.to_string/1)
     |> Stream.map(&String.trim_trailing/1)
+    # reverse to remove trailing empty lines
+    |> Enum.reverse()
+    |> Stream.drop_while(fn l -> l == "" end)
+    |> Enum.reverse()
     |> Enum.join("\n")
   end
 end

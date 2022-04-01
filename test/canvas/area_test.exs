@@ -56,7 +56,7 @@ defmodule AreaTest do
         |> Area.draw(rect2, 5, 5)
         |> Area.to_ascii()
 
-      assert "aaa\naba\naaa\n\n\n     dd\n     dd" ==
+      assert "aaa\naba\naaa\n\n\n     cc\n     cc" ==
                ascii
     end
 

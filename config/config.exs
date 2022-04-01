@@ -47,6 +47,13 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+
+config :canvas, Canvas.Repo,
+  username: {:system, :string, "POSTGRES_DB_USER"},
+  password: {:system, :string, "POSTGRES_DB_PASSWORD"},
+  database: {:system, :string, "POSTGRES_DB_NAME"},
+  hostname: {:system, :string, "POSTGRES_DB_HOST"}
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

@@ -19,10 +19,15 @@ defmodule Canvas.Area do
   end
 
   def new(height, width) do
+    new(height, width, init_content(height, width))
+  end
+
+  @spec new(pos_integer(), pos(), Arrays.array()) :: Canvas.Area.t()
+  def new(height, width, content) do
     %__MODULE__{
       height: height,
       width: width,
-      content: init_content(height, width)
+      content: content
     }
   end
 
@@ -62,6 +67,14 @@ defmodule Canvas.Area do
     area.content
     |> Enum.to_list()
     |> Enum.map(&Enum.to_list(&1))
+  end
+
+  @spec content_from_list(list) :: t()
+  def content_from_list(l) do
+    Enum.map(l, fn sl ->
+      Arrays.new(sl)
+    end)
+    |> Enum.into(Arrays.new())
   end
 
   def to_ascii(area) do

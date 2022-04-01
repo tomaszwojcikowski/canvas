@@ -18,7 +18,6 @@ defmodule CanvasWeb.CanvasController do
     area2 =
       Enum.reduce(rects_def, area, fn r, ar ->
         r = parse_rect(r)
-        IO.inspect(r)
         rect = Canvas.Rect.new(r[:height], r[:width], r[:outline], r[:fill])
         Canvas.Area.draw(ar, rect, r[:x], r[:y])
       end)

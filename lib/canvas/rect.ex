@@ -1,4 +1,8 @@
 defmodule Canvas.Rect do
+  @moduledoc """
+  Define and draw Rect on Area
+  """
+
   alias Canvas.Area
 
   defstruct [:height, :width, :outline, :fill]

@@ -1,4 +1,7 @@
-defmodule Canvas.Modules.Area do
+defmodule Canvas.Models.Area do
+  @moduledoc """
+  Area model for Ecto
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -17,5 +20,4 @@ defmodule Canvas.Modules.Area do
     |> cast(params, [:content, :height, :width])
     |> validate_required([:content, :height, :width])
   end
-
 end

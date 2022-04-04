@@ -47,7 +47,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-
 config :canvas, Canvas.Repo,
   username: {:system, :string, "POSTGRES_DB_USER"},
   password: {:system, :string, "POSTGRES_DB_PASSWORD"},

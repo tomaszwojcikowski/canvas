@@ -1,4 +1,8 @@
 defmodule Canvas.Area do
+  @moduledoc """
+  Define Area to draw on it
+  """
+
   defstruct [:height, :width, :content]
 
   @type t() :: %__MODULE__{
@@ -47,15 +51,7 @@ defmodule Canvas.Area do
     Canvas.Rect.draw(area, rect, x, y)
   end
 
-  @spec draw_horizontal(t(), integer, integer, integer, char()) :: t()
-  def draw_horizontal(area, x, y, width, fill) do
-    x..(x + width - 1)
-    |> Enum.reduce(area, fn i, ar ->
-      new_x_array = ar.content[y] |> Arrays.replace(i, fill)
-      %{ar | content: ar.content |> Arrays.replace(y, new_x_array)}
-    end)
-  end
-
+  @spec draw_vertical(t(), pos(), pos(), pos_integer(), char()) :: t()
   def draw_vertical(area, x, y, height, fill) do
     y..(y + height - 1)
     |> Enum.reduce(area, fn j, ar ->
@@ -63,10 +59,13 @@ defmodule Canvas.Area do
     end)
   end
 
-  def to_list(area) do
-    area.content
-    |> Enum.to_list()
-    |> Enum.map(&Enum.to_list(&1))
+  @spec draw_horizontal(t(), pos(), pos(), integer, char()) :: t()
+  def draw_horizontal(area, x, y, width, fill) do
+    x..(x + width - 1)
+    |> Enum.reduce(area, fn i, ar ->
+      new_x_array = ar.content[y] |> Arrays.replace(i, fill)
+      %{ar | content: ar.content |> Arrays.replace(y, new_x_array)}
+    end)
   end
 
   @spec content_from_list(list) :: t()
@@ -77,6 +76,7 @@ defmodule Canvas.Area do
     |> Enum.into(Arrays.new())
   end
 
+  @spec to_ascii(t()) :: String.t()
   def to_ascii(area) do
     area
     |> to_list()
@@ -93,5 +93,12 @@ defmodule Canvas.Area do
     |> Stream.drop_while(fn l -> l == "" end)
     |> Enum.reverse()
     |> Enum.join("\n")
+  end
+
+  @spec to_list(t()) :: list(list(char))
+  def to_list(area) do
+    area.content
+    |> Enum.to_list()
+    |> Enum.map(&Enum.to_list(&1))
   end
 end

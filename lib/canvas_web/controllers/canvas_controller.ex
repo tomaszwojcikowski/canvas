@@ -22,7 +22,7 @@ defmodule CanvasWeb.CanvasController do
         Canvas.Area.draw(ar, rect, r[:x], r[:y])
       end)
 
-    m_area = Canvas.Areas.create(area2)
+    m_area = Canvas.Areas.create!(area2)
 
     text(conn, m_area.uuid)
   end
@@ -43,6 +43,7 @@ defmodule CanvasWeb.CanvasController do
     case Canvas.Areas.get_by_uuid(id) do
       {:ok, area} ->
         text(conn, Canvas.Area.to_ascii(area))
+
       _ ->
         render(conn, :"404")
     end

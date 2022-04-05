@@ -78,8 +78,7 @@ defmodule Canvas.Area do
 
   @spec to_ascii(t()) :: String.t()
   def to_ascii(area) do
-    area
-    |> to_list()
+    area.content
     |> Stream.map(fn l ->
       Enum.map(l, fn
         nil -> " "

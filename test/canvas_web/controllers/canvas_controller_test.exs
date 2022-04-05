@@ -3,11 +3,13 @@ defmodule CanvasWeb.CanvasControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, Routes.canvas_path(conn, :index))
+    assert text_response(conn, 200)
     assert conn.resp_body =~ "\n"
   end
 
   test "PUT empty", %{conn: conn} do
     conn = post(conn, Routes.canvas_path(conn, :create), %{"rects" => []})
+    assert text_response(conn, 200)
     assert conn.resp_body =~ ""
   end
 
@@ -25,6 +27,7 @@ defmodule CanvasWeb.CanvasControllerTest do
     id = conn.resp_body
 
     conn = get(conn, Routes.canvas_path(conn, :show, id))
+    assert text_response(conn, 200)
     assert "\n\n %%%%%%\n %&&&&%\n %&&&&%\n %&&&&%\n %%%%%%" == conn.resp_body
   end
 
@@ -40,5 +43,10 @@ defmodule CanvasWeb.CanvasControllerTest do
 
     conn = get(conn, Routes.canvas_path(conn, :show, model.uuid))
     assert text_response(conn, 200)
+  end
+
+  test "GET not_found", %{conn: conn} do
+    conn = get(conn, Routes.canvas_path(conn, :show, "44e4152e-fa6d-47fb-b33e-fe2edcbb2a4d"))
+    assert text_response(conn, 404)
   end
 end

@@ -45,7 +45,11 @@ defmodule CanvasWeb.CanvasController do
         text(conn, Canvas.Area.to_ascii(area))
 
       _ ->
-        render(conn, :"404")
+        conn
+        |> put_status(:not_found)
+        |> put_view(CanvasWeb.ErrorView)
+        |> put_resp_content_type("text/plain")
+        |> render(:"404")
     end
   end
 end
